@@ -1,0 +1,116 @@
+---
+title: Title here
+
+# to produce blinded version set to 1
+blinded: 0
+
+authors: 
+- name: Author 1
+  thanks: The authors gratefully acknowledge ...
+  affiliation: Department of YYY, University of XXX
+  
+- name: Author 2
+  affiliation: Department of ZZZ, University of WWW
+
+keywords:
+- 3 to 6 keywords
+- that do not appear in the title
+
+abstract: |
+  The text of your abstract.  200 or fewer words.
+
+bibliography: bibliography.bib
+output: rticles::asa_article
+---
+
+# Introduction
+
+This template demonstrates some of the basic latex you'll need to know to create a ASA article.
+– Student clearly established the aim of the project.
+– Student offered a clear roadmap of the report (i.e what is covered in the report).
+
+\section{Problem Statement and Background}
+\label{sec:verify}
+– Student offered a clear and complete statement of the problem and/or aim of their
+analysis.
+– Student included a brief summary of any related work (i.e. a light literature review)
+
+\section{Data}
+\label{sec:verify}
+– Student outlined where their data came from.
+– Student clearly specified:
+∗ the unit of observation;
+∗ the outcome of interest and how it is measured;
+∗ predictor variables of interest (and why they were selected);
+∗ potential issues in the data (e.g. missingness, coverage, etc.)
+– Student articulate the steps they took to wrangle the data.
+
+\section{Analysis}
+\label{sec:verify}
+– Student described the methods/tools they explored in their project.
+∗ Justified the tools/methods that they used.
+∗ Adequately described what the tools/methods are doing.
+∗ Note: Assume the reader is smart but doesn’t know programming/machine mearning
+well. That is, be crystal clear about what you’re doing and why.
+
+\section{Results}
+\label{sec:verify}
+– Student gave a detailed summary of their results.
+– Student presented their results clearly and concisely.
+– Student used visualizations (and tables) whenever possible/appropriate.
+– Student highlighted some clear takeaways (“things learned”) and theoretical implications
+(“potential hypotheses”) from their analysis.
+
+\section{Discussion}
+\label{sec:verify}
+– Student spoke on the “success” of their project (as defined in their proposal).
+∗ “Did you achieve what you set out to do? If not why?”
+– Student articulate how they would expand the analysis if given more time.
+
+@Campbell02 @Schubert13 [@Chi81]
+
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+__With this spacing we have 30 lines per page.__
+
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+The quick brown fox jumped over the lazy dog.
+
