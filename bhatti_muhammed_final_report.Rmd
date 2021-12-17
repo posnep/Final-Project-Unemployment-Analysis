@@ -1,0 +1,132 @@
+---
+  title: "Study of Improper payments made by the Unemployment Agencies from 2016-2021: Final Report"
+  subtitle: "Data Science I: Foundations - Fall 2021 - Georgetown University"
+  author: "Muhammed Asif Bhatti"
+  date: 12/16/2021
+  output:
+    html_document:
+      css: style.css
+---
+
+#### __Word Count__: `r as.integer(sub("(\\d+).+$", "\\1", system(sprintf("wc -w %s", knitr::current_input()), intern = TRUE)))`
+
+#### __Github Repository__: https://github.com/posnep/Final-Project-Unemployment-Analysis
+
+### __*1. Introduction*__
+
+The US Unemployment Insurance Program is a social insurance program that aims to complement wages for claimants who have lost a significant amount of their livable wages. The first unemployment program was created at a state level in 1932 for the great State of Wisconsin. It was in 1935 where the federal government created a similar program that would bring the program nationwide but administered by states.
+Unemployment eligibility is determined by a set of requirements, which often vary by states. Generally speaking, if the separation from the employee is without cause (e.g., fired for misconduct) then the person is eligible for unemployment benefits. Said another way, if a person simply leaves a job without “good cause” then they are not eligible for unemployment.
+
+To provide a brief overview of the funding structure, unemployment programs are funded by both federal and state payroll taxes. In most states employers pay state and federal unemployment taxes if they pay an employee more than $1500 or more for any quarter or if they had an employee for any business day in the quarter. This in turn builds a trust fund from which benefits are distributed upon confirmation of eligibility of claimants.
+
+During the COVID-19 pandemic, many residents of states were faced with safeguarding their lives from a deadly pandemic which in turn led them to staying at home. The other side of safeguarding their livelihoods resulted in large amounts of unemployment, which ultimately many state systems were not setup to manage. Unemployment Agencies in turn had to serve a larger amount of the population at top performance levels, while trying to ensure low overall improper payments made to claimants. Additionally, during COVID-19 state unemployment agencies faced many changes and issues with their programs and processes.
+
+![](/Users/abhatti/Documents/masterInScience/PPOL564/Final Project/Final-Project-Unemployment-Analysis/pngs/Table 1.png)
+
+This study looks at the history of unemployment disbursement from 2016 - 2021 as measured by improper payment rates. Specifically, we hope to understand if certain states that have higher budgets, federal funding, capital expenditures, education, populations have a correlation to improper payment rate.
+We will provide more detail on the overall problem, walkthrough of the data sources used for this study, discuss preliminary analysis conducted, detailed review of the results and a brief discussion of potential outcomes from this work.
+
+
+### __*2. Problem Statement and Background*__
+
+This study primarily aims to understand the effects of population, education spend, overall state spending, and federal funding as it relates to lowering improper payment rates. By definition, improper payments rate is the frequency at which a fraudulent claim was adjudicated and / or an overpayment was made to either a real or fraudulent claimant. The focus of this analysis will be to understand how various states performed across various years to limit their improper payment rate as a function of increased funding.
+
+A study by the National Conference of State Legislatures (NCSL), spoke to the poor response of many states to unemployment fraud and overpayments. This issue, they say “was especially prevalent during the pandemic as unemployment claims surged.”^[Unemployment Insurance Improper Payments and Fraud; Zatiana Follett, Zach Herman; (2021, April 28) from https://www.ncsl.org/research/labor-and-employment/unemployment-insurance-improper-payments-and-fraud.aspx] As an example of how much fraud there was present, New York had prevented $6.4 billion in fraudulent payments across 500K+ claims since the start of the pandemic.
+
+In the weeks coming out of COVID, many states have uncovered that they paid millions if not billions out as improper payments. A state audit in Colorado, found that the state paid $73 million in unemployment improperly^[State audit finds Colorado improperly paid $73 million in unemployment benefits, including to dead people, ALEX BURNESS (2021, Dec 7) from https://www.fox47news.com/neighborhoods/state-capitol/michigans-unemployment-agency-paid-3-9-billion-in-improper-claims-auditor-general-finds], where another audit found Michigan paid $3.9 billion in improper claims^[Michigan's unemployment agency paid $3.9 billion in improper claims, auditor general finds, Elle Meyers (2021, April 12) from https://www.fox47news.com/neighborhoods/state-capitol/michigans-unemployment-agency-paid-3-9-billion-in-improper-claims-auditor-general-finds]. Across the US there is an estimate that about ~$87 billion dollars of taxpayer money was siphoned out of the unemployment system through a combination of improper payments or fraud^[More than $87 billion in federal benefits siphoned from unemployment system, says Labor Department Greg Iacurci (2021, Dec 2) from https://www.cnbc.com/2021/12/02/over-87-billion-in-federal-benefits-siphoned-from-unemployment-system.html].
+
+There haven’t been many studies that look at state agency performance as it could relate with expenditures, technology investments, and people. In fact, many states through COVID are realizing that underinvesting in technology has left them at a disadvantage relative to their peers. City governments have in-fact picked up the divide, but with programs such as unemployment the impact has been little to none.
+
+The aim for this study is to understand the relationship between improper payments and state expenditures, where we hypothesized that higher expenditures over the years results in better claim adjudication through lower levels of improper payments.
+
+
+### __*3. Data*__
+
+In order to conduct this study, there were various data sets used to build a time series data set going back all the way to 2016. The data cube built for this study had observations for each state across 2016 - 2021. We used 4 data sources to pull together a primary data cube which are detailed as follow:
+
+1. **[Unemployment Insurance Payment Accuracy Datasets](https://www.dol.gov/agencies/eta/unemployment-insurance-payment-accuracy/data)**^[Unemployment Insurance Payment Accuracy Datasets; 2021-2016 from https://www.dol.gov/agencies/eta/unemployment-insurance-payment-accuracy/data] from the US Department of Labor -  (1) Amount Paid, (2) Overpayment rate, (3) Improper payment rate, (4) and Fraud rate from 2016-2021
+
+2. **[State Expenditure Report Fiscal 2016-2020](https://www.kff.org/other/state-indicator/per-capita-state-spending/?currentTimeframe=0&sortModel=%7B%22colId%22:%22Location%22,%22sort%22:%22asc%22%7D)**^[Total State Expenditures per Capita; 2021-2016 from https://www.kff.org/other/state-indicator/per-capita-state-spending/?currentTimeframe=0&sortModel=%7B%22colId%22:%22Location%22,%22sort%22:%22asc%22%7D] from National Association of State Budget Officers (NASBO) (1) Per Capita Expenditure across various measures
+
+
+3. **[Federal support quantified in dollars awarded](https://www.usaspending.gov/state)**^[US State Spending; 2021-2016 from https://www.usaspending.gov/state] from USspending.gov -  (1) Federal dollars awarded
+
+4. **[Population data](https://www.census.gov/quickfacts/fact/table/US/PST045219)**^[US Census; 2021-2016 from https://www.census.gov/quickfacts/fact/table/US/PST045219] for each state across 2016-21 from the US Census
+
+Across this data the outcome variable that was selected from the Unemployment Insurance Payment Accuracy Data set. As improper payment is a function of overpayment and fraudulently paid, we decided that improper payment rate is a good indicator of agency performance, and hence was selected as the outcome variable. The predictors we looked at were from the Expenditure Report specifically being: year in which the employment occurred (Unemploy_Year), Total spending / investment from Federal Funds (FFTOT_CAP), All Other Capital Federal Funds (OTHCP_FF), Total overall state spending (TOTAL_CAPI), General Fund Total Spending for the State (GFTOT_CAPI), Other State Funds Total Spending (OFTOT_CAPI), Total Revenue for the State (TOTAL REV), Party affiliation of the elected governor of that state during that year, and population estimate of the state during that year (POPESTIMATE).
+
+During the initial data discovery phase there were many additional variables that were being considered but had to be dropped. As an example fraud rate, as measured by UI state systems during the adjudication process, was recorded for the year 2021 and 2020, but was completely absent from all other years. In the spirit of ensuring a sizable amount of data was present for the later parts of the analysis, we ended up dropping those variables in order to ensure broadly full coverage.
+
+Lastly, in order to structure the data into a working format the raw data was accessed via a CSV read. After which they were subset out by year for cleaning and processing, given the format actually varied year over year. At the subsetted level additional data was left joined to ensure proper mapping. As an example, we wanted to map Year - 1 expenditure data to the Year Unemployment data. This was because the expenditure and revenue from the year prior would affect the operations of the Unemployment Agency in the year. Finally, once all year subsets were ready, they were all joined together into a master dataset.
+
+
+### __*4. Analysis*__
+
+In order to conduct this analysis used a number of data management and investigation tools. To name a few, pandas, numpy, missingno, plotnine, and matplotlib. Through this we were able to join the various data sets, conduct data discovery, and ensure everything is ready for the actual machine learning.
+
+Upfront we conducted a broad assessment of missingness of data in the data frame, as visualized in the figure 1 below.
+
+![](/Users/abhatti/Documents/masterInScience/PPOL564/Final Project/Final-Project-Unemployment-Analysis/pngs/Figure 1 Missingness.png)
+
+A couple things resulted from viewing the missingness of data - 1) we questioned whether we could use fraud rate given how in-frequenty it was reported and 2) prioritized which variables to include in our modeling exercise. As mentioned above, we selected ~10 variables to include and dropped all the others from the data-set.
+
+Following this we assessed where there were NAs in the dataset, which was the case for party affiliation. In this case we willed the NAs with 0 as party was a categorical variable that we needed to break into a dummy variable that looked at republican vs non-republican state governors.
+
+After this we looked at assessing skew of all our variables including the outcome variable. Figure 2.
+
+
+![](/Users/abhatti/Documents/masterInScience/PPOL564/Final Project/Final-Project-Unemployment-Analysis/pngs/Figure_2_Skew.png)
+
+In viewing this we noticed there was a rightward skew of many variables we looked at ensuring a rightward skew could be normalized using a logged variable. As an example we share the normal distribution seen after we logged the independent variable.
+
+![](/Users/abhatti/Documents/masterInScience/PPOL564/Final Project/Final-Project-Unemployment-Analysis/pngs/Figure_3_Skew.png)
+
+![](/Users/abhatti/Documents/masterInScience/PPOL564/Final Project/Final-Project-Unemployment-Analysis/pngs/Figure_4_Sckew.png)
+
+We needed to use a log function to normalize the data because a skewed distribution would result in poor model performance, implying there could be a biased relationship coming out of the models we built.
+
+For the machine learning portion of the study we relied on python’s scikit-learn package^[Pedregosa, F., et al. (2011). Scikit-learn: Machine Learning in Pytho nJournal of Machine Learning Research, 12, 2825–2830 from https://www.jmlr.org/papers/volume12/pedregosa11a/pedregosa11a.pdf], which provides a number of predictive analytics solutions. We ran the predictive variables through a machine learning pipeline that was automated to help tune each variable (i.e., normalize each variable). This allowed us and the model to compare the various predictive variables and draw conclusions on the effect on the outcome. Cross validation allowed us to estimate which model would perform better by creating a hold-out subset of the data. The cross-validation method use was a k-fold validation, which splits the observations into k groups and treats the test set as the testing data. This was run k times. For our study we set K to 5.
+
+Resulting from too few observations the model performance could have results with a lot of noise (i.e., variance). High variance / noise in models thus results in overfitting of the model onto the training data. We did try to adjust this by increasing the number of observations across time going all the way back to 2016, but unfortunately as our results show we may have needed to have gone back further.
+
+As for the classifier used, we used a linear model, KNN, Decision Tree, Bagging decision tree model, and Random Forest with N Estimators. A linear regression model simply checked the various features to see if there was a linear relationship. The KNN or K Nearest Neighbors worked by identifying K points from the training data that had a strong relationship to the outcome variable. The decision tree classified based on splitting the observations across specific decision criteria (e.g., Total Revenue > $XX). This classifier then splits the observations across these decisions. Similarly, bagging decision trees has the goal to reduce the noise or variable of the decision tree. Several subsets of the training data are chosen randomly pushed through a set of decisions. The final tree is an average of all the predictions in order to provide a single tree.
+Finally, the metrics used to evaluate the performance of the model was the mean squared error and the  r-squared. The mean squared error takes the residual sums of squares from the predictions thus having a low MSE implies relatively good model performance. Similarly  r-squared measures the fit of the model, in which case if it is closer to 1 the better. Usually it’s incredibly hard to get an r-squared above 0.80.
+
+
+### __*5. Results*__
+
+The overall model output that performed the best was the bagging tree model which had a mean squared error of 0.004 and an r-squared value of 0.28. While the MSE being near or close to zero is a positive, the low r-squared implies there was poor fit overall.
+
+![](/Users/abhatti/Documents/masterInScience/PPOL564/Final Project/Final-Project-Unemployment-Analysis/pngs/Figure 5 DTree.png)
+
+In the Figure 5 above you see the bagging tree classification model, which can be read looking at the binary condition at the top of the box. The line on the left is the true condition at which point you follow the tree to the next node. This model was the one that performed the best and showed that at a top level, if your unemployment year was not less than 2020 (i.e., was 2021) there were higher rates of improper payment overall (i.e., 18.4% vs 11.3%). After this the sample size in the nodes and leaves gets too small to actually prove that higher rates of improper payments were seen because of a particular predictive variable. This though makes sense because 2021 was the year in which there was COVID and high unemployment. We already know there was widespread improper payments made by agencies that were ill-equipped to process claims properly. Through primary research, we know that agencies sided on pushing payments to ensure that they were protecting the livelihoods of the residents during COVID, regardless of potential fraud.
+
+Following the tree for improper payment rates pre-2020, shows that being in the state of Michigan was an important factor. It seems historically, the State of Michigan has had poor adjudication of claims that have resulted in high rates of improper payments. During the initial review of data we noticed that Michigan (see 2017 for MI) was an outlier historically speaking, as seen in the figure below.
+
+
+![](/Users/abhatti/Documents/masterInScience/PPOL564/Final Project/Final-Project-Unemployment-Analysis/pngs/Figure 6 Improper Payments.png)
+
+So perhaps the State of Michigan UI agency has a tough time lowering their overall improper payments rates over the years. The subsequent nodes are not worth reviewing given the sample size gets too small.
+
+If a state was not Michigan then the most important factor that determined improper payment rate was TOTAL_CAPI (i.e. Total overall state spending). Here our model shows that if a state spends less than ~$30.5M then there is an overall lower rate of improper payments, where if they spend more there is a higher rate. At first glance this feels counterintuitive, but upon thinking more if a state is spending more than this it is likely driven by an overall higher headcount to augment services capacity needed. It could be the case that states that spend less have done so because they have invested in technology to decrease their overall largest driver of expense (i.e. headcount). While this conclusion cannot be surmised from this study, it does leave it as an open question.
+
+Overall, the key takeaways from this study are as follows:
+
+1. **There were considerably more improper payments made during the pandemic**, as shown by the fact that is the first node in the tree. Contextually this makes sense, because there was record high unemployment during the pandemic and many state agencies had to balance making an improper payment vs holding back real claims from real claimants.
+2. Historically, **Michigan as a state government has performed poorly and has had a statistically significant number of improper payments**. This is consistent with improper payments reported by the state historically, as reported by Senator Peters^[Federal government pays millions to the dead every year. Sen. Peters is trying to end that, Todd Spangler, Detroit Free Press (2019, May 19) from https://www.freep.com/story/news/local/michigan/2019/05/13/dead-people-payments-social-security/1189701001/].
+3.    **States that spend more than ~$30.5M annually likely have more rates of improper payments.** This could be explained that such states are spending higher on people / employees who are more likely to make an error in adjudication decisions. In turn, it could be possible that states that invest more in technology and spend less on people have overall lower rates of improper payments. Though, this last conclusion is more of a potential hypothesis to further explore.
+
+
+
+### __*6. Discussion*__
+
+Overall the hypothesis that we were striving to test was to see how improper payment rates are affected by various expenditure metrics (e.g., spending and revenue). Specifically, we hypothesized that higher levels of investments potentially led to lower rates of improper payments which was not the case.
+
+Of the tasks we set out to do, we did accomplish gathering a meaningful amount of data to create a data cube for the machine learning models. We were able to further transform, assess, and visualize the data sets to discrene meaningful insights. Lastly, we accomplished building various machine learning models that helped test our ingoing hypothesis.
+
+A future analysis or revision of this study should be conducted to further investigate the finding that less state spending could lead to lower rates of improper payments. As mentioned above, this very well could be a result of efficient spending in areas that give unemployment agencies reliancy (to volume of claims) and efficiency in adjudicating properly. In future analysis could break down the data set to individual claims level information for each state and go further back in time to understand the largest drivers for improper payments.
+Lastly, modeling state performance specifically for unemployment agencies is difficult. First states do not report individual unemployment claims information which makes it challenging to gather enough observations around improper payments. Secondly, there are additional factors such as technology expenditure at a state agency which many states do not report at an agency level, which further results in a top-down analysis which contains a lot of noise.
+
+Despite the aforementioned, this study does make it clear that an unemployment agency can achieve high performance levels (i.e., low levels of improper payments) through strategically spending in areas.
+
+### __*References*__
